@@ -19,12 +19,19 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     alignItems: "center",
     backgroundColor: "#FAFAFA",
+    [theme.breakpoints.down("md")]: {
+      flexDirection: "column",
+    },
   },
 
   info: {
     borderLeft: "1px solid black",
     padding: theme.spacing(3),
     marginTop: theme.spacing(-6),
+    [theme.breakpoints.down("md")]: {
+      border: "none",
+      marginTop: theme.spacing(3),
+    },
   },
 }));
 
@@ -66,7 +73,7 @@ export default function profiel({ data }) {
 
 export async function getServerSideProps(ctx) {
   try {
-    const resp = await axios.get(process.env.API_BASEPATH + "/user");
+    const resp = await axios.get(process.env.API_BASEPATH + "/user/1");
     const data = resp.data;
     return {
       props: {
