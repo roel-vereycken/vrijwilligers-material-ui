@@ -8,6 +8,8 @@ import {
 } from "@material-ui/core";
 import Navbar from "../components/Navbar";
 import Leftbar from "../components/Leftbar";
+import ProfielForm from "../components/ProfielForm";
+import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -18,15 +20,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     backgroundColor: "#FAFAFA",
   },
-  form: {
-    width: "50%",
-  },
-  item: {
-    marginBottom: theme.spacing(3),
-  },
-  textfield: {
-    width: "90%",
-  },
+
   info: {
     borderLeft: "1px solid black",
     padding: theme.spacing(3),
@@ -34,9 +28,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function profiel() {
+export default function profiel({ data }) {
   const classes = useStyles();
-
   return (
     <>
       <Navbar />
@@ -46,45 +39,7 @@ export default function profiel() {
         </Grid>
         <Grid item xs={10}>
           <Container className={classes.container}>
-            <form className={classes.form}>
-              <div className={classes.item}>
-                <TextField
-                  id="standard-basic"
-                  label="Voornaam"
-                  size="small"
-                  variant="outlined"
-                  className={classes.textfield}
-                ></TextField>
-              </div>
-              <div className={classes.item}>
-                <TextField
-                  id="standard-basic"
-                  label="Naam"
-                  size="small"
-                  variant="outlined"
-                  className={classes.textfield}
-                ></TextField>
-              </div>
-              <div className={classes.item}>
-                <TextField
-                  id="standard-basic"
-                  label="Email"
-                  size="small"
-                  variant="outlined"
-                  className={classes.textfield}
-                ></TextField>
-              </div>
-              <div className={classes.item}>
-                <TextField
-                  id="standard-basic"
-                  label="Telefoon"
-                  size="small"
-                  variant="outlined"
-                  className={classes.textfield}
-                ></TextField>
-              </div>
-              <Button color="primary">Sla wijzigingen op</Button>
-            </form>
+            <ProfielForm user={data[0]} />
             <div className={classes.info}>
               <Typography variant="h2">Info:</Typography>
               <Typography>
@@ -107,4 +62,18 @@ export default function profiel() {
       </Grid>
     </>
   );
+}
+
+export async function getServerSideProps(ctx) {
+  try {
+    const resp = await axios.get(process.env.API_BASEPATH + "/user");
+    const data = resp.data;
+    return {
+      props: {
+        data,
+      },
+    };
+  } catch (e) {
+    console.error(e);
+  }
 }
